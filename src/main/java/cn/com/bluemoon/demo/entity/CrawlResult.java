@@ -1,5 +1,6 @@
 package cn.com.bluemoon.demo.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -29,5 +30,21 @@ public class CrawlResult {
      * 选择的结果，key为选择规则，value为根据规则匹配的结果
      */
     private Map<String, List<String>> result;
+
+    private Status status;
+
+    public void setStatus(int code, String msg) {
+        this.status = new Status(code, msg);
+    }
+
+    @Getter
+    @Setter
+    @ToString
+    @AllArgsConstructor
+    static class Status {
+        private int code;
+
+        private String msg;
+    }
 
 }

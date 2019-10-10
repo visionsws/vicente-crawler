@@ -4,14 +4,15 @@ import cn.com.bluemoon.demo.entity.CrawlMeta;
 import cn.com.bluemoon.demo.entity.CrawlResult;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -42,47 +43,20 @@ public class SimpleCrawlJob extends AbstractJob {
      * 执行抓取网页
      */
     public void doFetchPage() throws Exception {
-
-        URL url = new URL(crawlMeta.getUrl());
-        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-        BufferedReader in = null;
-
-        StringBuilder result = new StringBuilder();
-
-        try {
-            // 设置通用的请求属性
-            connection.setRequestProperty("accept", "*/*");
-            connection.setRequestProperty("connection", "Keep-Alive");
-            connection.setRequestProperty("user-agent", "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1;SV1)");
-            // 建立实际的连接
-            connection.connect();
-
-
-            Map<String, List<String>> map = connection.getHeaderFields();
-            //遍历所有的响应头字段
-            for (String key : map.keySet()) {
-                System.out.println(key + "--->" + map.get(key));
-            }
-
-            // 定义 BufferedReader输入流来读取URL的响应
-            in = new BufferedReader(new InputStreamReader(
-                    connection.getInputStream()));
-            String line;
-            while ((line = in.readLine()) != null) {
-                result.append(line);
-            }
-        } finally {        // 使用finally块来关闭输入流
-            try {
-                if (in != null) {
-                    in.close();
-                }
-            } catch (Exception e2) {
-                e2.printStackTrace();
-            }
+        HttpClient httpClient = HttpClients.createDefault();
+        HttpGet httpGet = new HttpGet(crawlMeta.getUrl());
+        httpGet.addHeader("accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8");
+        httpGet.addHeader("connection", "Keep-Alive");
+        httpGet.addHeader("user-agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36");
+        HttpResponse response = httpClient.execute(httpGet);
+        String res = EntityUtils.toString(response.getEntity());
+        if (response.getStatusLine().getStatusCode() == 200) { // 请求成功
+            doParse(res);
+        } else {
+            this.crawlResult = new CrawlResult();
+            this.crawlResult.setStatus(response.getStatusLine().getStatusCode(), response.getStatusLine().getReasonPhrase());
+            this.crawlResult.setUrl(crawlMeta.getUrl());
         }
-
-
-        doParse(result.toString());
     }
 
 
