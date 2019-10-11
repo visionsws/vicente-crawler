@@ -1,8 +1,13 @@
 package cn.com.bluemoon.demo.entity;
 
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import java.io.Serializable;
+import java.util.Date;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -25,6 +30,7 @@ public class MpUser extends Model<MpUser> {
     /**
      * 主键ID
      */
+    @TableId(type = IdType.ID_WORKER)
     private Long id;
 
     /**
@@ -40,8 +46,13 @@ public class MpUser extends Model<MpUser> {
     /**
      * 邮箱
      */
-    @TableField(select = false)
     private String email;
+
+    @TableField(fill = FieldFill.INSERT)
+    private Date createTime;
+
+    @TableField(fill = FieldFill.UPDATE)
+    private Date updateTime;
 
 
     @Override

@@ -55,13 +55,13 @@ public class SampleTest {
     public void test1() {
         // 插入新记录
         MpUser mpUser = new MpUser();
-        mpUser.setId(1L);
-        mpUser.setEmail("test66@baomidou.com");
+        //mpUser.setId(1L);
+        mpUser.setEmail("wm@baomidou.com");
         mpUser.setAge(28);
-        mpUser.setName("Tom");
+        mpUser.setName("王蒙");
         mpUserService.save(mpUser);
         // 或者
-        mpUser.insertOrUpdate();
+        //mpUser.insertOrUpdate();
         // 更新完成后，mpUser对象的id会被补全
         log.info("mpUser={}", mpUser.toString());
 
