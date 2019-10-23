@@ -52,7 +52,7 @@ public class SampleTest {
     private MpUserService mpUserService;
 
     @Test
-    public void test1() {
+    public void testInsert() {
         // 插入新记录
         MpUser mpUser = new MpUser();
         //mpUser.setId(1L);
@@ -64,6 +64,22 @@ public class SampleTest {
         //mpUser.insertOrUpdate();
         // 更新完成后，mpUser对象的id会被补全
         log.info("mpUser={}", mpUser.toString());
+
+    }
+
+    @Test
+    public void testUpdate() {
+        // 更新记录
+        MpUser mpUser = new MpUser();
+        mpUser.setId(1182478087497998337L);
+        MpUser newUser = mpUser.selectById();
+        System.out.println(mpUser == newUser);
+
+        mpUser.setName("王天");
+        mpUser.updateById();
+
+        log.info("mpUser={}", mpUser.toString());
+        log.info("newUser={}", newUser.toString());
 
     }
 

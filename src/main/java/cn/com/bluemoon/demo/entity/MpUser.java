@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import lombok.Data;
@@ -49,10 +50,10 @@ public class MpUser extends Model<MpUser> {
     private String email;
 
     @TableField(fill = FieldFill.INSERT)
-    private Date createTime;
+    private LocalDateTime createTime;
 
-    @TableField(fill = FieldFill.UPDATE)
-    private Date updateTime;
+    @TableField(fill = FieldFill.INSERT_UPDATE)
+    private LocalDateTime updateTime;
 
 
     @Override
