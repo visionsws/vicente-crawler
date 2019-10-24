@@ -51,10 +51,10 @@ public class DemoServiceImplTest {
      */
     @Test
     public void testFetch() throws InterruptedException {
-        String url = "https://my.oschina.net/u/566591/blog/1031575";
+        String url = "https://isaob.com/beauty/20190725/18316.html";
         Set<String> selectRule = new HashSet<>();
-        selectRule.add("div[class=title]"); // 博客标题
-        selectRule.add("div[class=blog-body]"); // 博客正文
+        //selectRule.add("div[id=masonry]>div>img[title]"); // 博客标题
+        selectRule.add("div#masonry>div[data-src$=.jpg]"); // 博客正文
 
         CrawlMeta crawlMeta = new CrawlMeta();
         crawlMeta.setUrl(url); // 设置爬取的网址
@@ -67,7 +67,6 @@ public class DemoServiceImplTest {
         thread.start();
 
         thread.join(); // 确保线程执行完毕
-
 
         CrawlResult result = job.getCrawlResult();
         System.out.println(result);

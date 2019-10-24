@@ -48,13 +48,10 @@ public class HttpUtils {
         }
 
         HttpGet httpGet = new HttpGet(param.substring(0, param.length() - 1)); // 过滤掉最后一个无效字符
-
         // 设置请求头
         for (Map.Entry<String, String> head : httpConf.getRequestHeaders().entrySet()) {
             httpGet.addHeader(head.getKey(), head.getValue());
         }
-
-
         // 执行网络请求
         return httpClient.execute(httpGet);
     }
@@ -65,20 +62,16 @@ public class HttpUtils {
         SSLContextBuilder builder = new SSLContextBuilder();
 //         全部信任 不做身份鉴定
         builder.loadTrustMaterial(null, (x509Certificates, s) -> true);
-        HttpClient httpClient = HttpClientBuilder.create().setSslcontext(builder.build()).build();
+        HttpClient httpClient = HttpClientBuilder.create().setSSLContext(builder.build()).build();
 
         HttpPost httpPost = new HttpPost(crawlMeta.getUrl());
-
-
         // 建立一个NameValuePair数组，用于存储欲传送的参数
         List<NameValuePair> params = new ArrayList<>();
         for (Map.Entry<String, Object> param : httpConf.getRequestParams().entrySet()) {
             params.add(new BasicNameValuePair(param.getKey(), param.getValue().toString()));
         }
 
-        httpPost.setEntity(new UrlEncodedFormEntity(params, HTTP.UTF_8));
-
-
+        httpPost.setEntity(new UrlEncodedFormEntity(params, "UTF-8"));
         // 设置请求头
         for (Map.Entry<String, String> head : httpConf.getRequestHeaders().entrySet()) {
             httpPost.addHeader(head.getKey(), head.getValue());

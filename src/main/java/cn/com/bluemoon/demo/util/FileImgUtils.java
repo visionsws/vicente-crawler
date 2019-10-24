@@ -1,12 +1,42 @@
 package cn.com.bluemoon.demo.util;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.HttpClients;
+
 import java.io.*;
 import java.net.MalformedURLException;
+import java.net.URLDecoder;
 
 public class FileImgUtils {
 
-    public static void writeFile(InputStream inputStream, String downloadDir, String filename) {
+    private static String FILE_ROOT = "C://data/crawler";//下载的目标路径
+
+    public static void downImage(String imgurl, String downloadDir, String filename) {
+        HttpClient httpClient = HttpClients.createDefault();
+        HttpGet httpGet = new HttpGet(imgurl);
         try {
+            HttpResponse response = httpClient.execute(httpGet);
+            HttpEntity entity = response.getEntity();
+            InputStream inputStream = entity.getContent();
+            String reFileName = URLDecoder.decode(filename, "UTF-8");
+            writeFile(inputStream, downloadDir , reFileName);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void writeFile(InputStream inputStream, String downloadDir, String filename) {
+        downloadDir = FILE_ROOT + File.separator + downloadDir;
+        try {
+            //文件保存位置
+            File saveDir = new File(downloadDir);
+            if (!saveDir.exists()) {
+                saveDir.mkdirs();
+            }
+
             //获取自己数组
             byte[] buffer = new byte[1024];
             int len = 0;
@@ -18,11 +48,6 @@ public class FileImgUtils {
 
             byte[] getData = bos.toByteArray();
 
-            //文件保存位置
-            File saveDir = new File(downloadDir);
-            if (!saveDir.exists()) {
-                saveDir.mkdir();
-            }
             File file = new File(saveDir + File.separator + filename);
             FileOutputStream fos = new FileOutputStream(file);
             fos.write(getData);
