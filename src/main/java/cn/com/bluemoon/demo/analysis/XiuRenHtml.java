@@ -18,8 +18,6 @@ public class XiuRenHtml extends AnalyHtmlType {
     public List<Map<String, String>> analyHtml(String html) {
         Document doc = Jsoup.parse(html);
         List<Map<String, String>> list = new ArrayList<>();
-
-
         Elements tableList = doc.select("div#masonry");
         Elements trList = tableList.select("div[data-fancybox=gallery]");
 
@@ -56,4 +54,22 @@ public class XiuRenHtml extends AnalyHtmlType {
         }
         return list;
     }
+
+    @Override
+    public List<String> nextHtml(String html){
+        Document doc = Jsoup.parse(html);
+        List<String> list = new ArrayList<>();
+        Elements tableList = doc.select("div[class=container-fluid my-4]");
+        Elements trList = tableList.select("div[class=row]").select("div[class=col-2]");
+
+        for( int i = 0; i <trList.size() ; i++) {
+            Element trEle = trList.get(i);
+            Elements hrefEle = trEle.select("a[href]");
+            String href = hrefEle.attr("href");
+            list.add(href);
+        }
+        return  list;
+    }
+
+
 }

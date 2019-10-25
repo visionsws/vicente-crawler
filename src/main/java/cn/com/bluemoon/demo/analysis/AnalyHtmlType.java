@@ -7,4 +7,6 @@ public abstract class AnalyHtmlType {
 
     public abstract List<Map<String,String>> analyHtml(String html);
 
+    public abstract List<String> nextHtml(String html);
+
 }

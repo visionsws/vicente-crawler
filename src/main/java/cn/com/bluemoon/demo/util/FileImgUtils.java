@@ -14,22 +14,25 @@ public class FileImgUtils {
 
     private static String FILE_ROOT = "C://data/crawler";//下载的目标路径
 
-    public static void downImage(String imgurl, String downloadDir, String filename) {
+    public static String downImage(String imgurl, String downloadDir, String filename) {
         HttpClient httpClient = HttpClients.createDefault();
         HttpGet httpGet = new HttpGet(imgurl);
+        String saveUrl = "";
         try {
             HttpResponse response = httpClient.execute(httpGet);
             HttpEntity entity = response.getEntity();
             InputStream inputStream = entity.getContent();
             String reFileName = URLDecoder.decode(filename, "UTF-8");
-            writeFile(inputStream, downloadDir , reFileName);
+            saveUrl = writeFile(inputStream, downloadDir , reFileName);
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return saveUrl;
     }
 
-    public static void writeFile(InputStream inputStream, String downloadDir, String filename) {
+    public static String writeFile(InputStream inputStream, String downloadDir, String filename) {
         downloadDir = FILE_ROOT + File.separator + downloadDir;
+        String saveUrl = "";
         try {
             //文件保存位置
             File saveDir = new File(downloadDir);
@@ -47,8 +50,8 @@ public class FileImgUtils {
             bos.close();
 
             byte[] getData = bos.toByteArray();
-
-            File file = new File(saveDir + File.separator + filename);
+            saveUrl = saveDir + File.separator + filename;
+            File file = new File(saveUrl);
             FileOutputStream fos = new FileOutputStream(file);
             fos.write(getData);
             if (fos != null) {
@@ -64,5 +67,6 @@ public class FileImgUtils {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return saveUrl;
     }
 }

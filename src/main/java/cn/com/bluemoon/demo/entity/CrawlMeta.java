@@ -1,8 +1,6 @@
 package cn.com.bluemoon.demo.entity;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -11,6 +9,8 @@ import java.util.Set;
  * Created by yihui on 2017/6/27.
  */
 @ToString
+@AllArgsConstructor
+@NoArgsConstructor
 public class CrawlMeta {
 
     /**
@@ -20,17 +20,18 @@ public class CrawlMeta {
     @Setter
     private String url;
 
-
     /**
      * 获取指定内容的规则, 因为一个网页中，你可能获取多个不同的内容， 所以放在集合中
      */
     @Setter
-    private Set<String> selectorRules;
+    @Getter
+    private Set<String> selectorRules  = new HashSet<>();
 
-
-    // 这么做的目的就是为了防止NPE, 也就是说支持不指定选择规则
-    public Set<String> getSelectorRules() {
-        return selectorRules != null ? selectorRules : new HashSet<>();
+    public Set<String> addSelectorRule(String rule) {
+        this.selectorRules.add(rule);
+        return selectorRules;
     }
+
+
 
 }

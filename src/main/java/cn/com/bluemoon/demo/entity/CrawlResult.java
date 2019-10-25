@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.jsoup.nodes.Document;
 
 import java.util.List;
 import java.util.Map;
@@ -14,22 +13,28 @@ import java.util.Map;
 @ToString
 public class CrawlResult {
 
+    public static Status SUCCESS = new Status(200, "success");
+    public static Status NOT_FOUND = new Status(494, "not found");
+
     /**
      * 爬取的网址
      */
     private String url;
 
+    /**
+     * 爬取的对应的html名称
+     */
+    private String htmlName;
 
     /**
-     * 爬取的网址对应的 DOC 结构
+     * 爬取的结果，一个map是一条数据
      */
-    private Document htmlDoc;
-
+    private List<Map<String, String>> result;
 
     /**
-     * 选择的结果，key为选择规则，value为根据规则匹配的结果
+     * 获取下一个html
      */
-    private Map<String, List<String>> result;
+    private List<String> nextUrls;
 
     private Status status;
 
