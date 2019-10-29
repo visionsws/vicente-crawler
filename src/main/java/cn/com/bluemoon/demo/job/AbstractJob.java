@@ -1,10 +1,14 @@
 package cn.com.bluemoon.demo.job;
 
+import cn.com.bluemoon.demo.entity.CrawlResult;
+
 public abstract class AbstractJob implements IJob {
 
+    @Override
     public void beforeRun() {
     }
 
+    @Override
     public void afterRun() {
     }
 
@@ -31,4 +35,12 @@ public abstract class AbstractJob implements IJob {
      * @throws Exception
      */
     public abstract void doFetchPage() throws Exception;
+
+
+    /**
+     * 解析完网页后的回调方法
+     *
+     * @param crawlResult
+     */
+    protected abstract void visit(CrawlResult crawlResult);
 }

@@ -1,7 +1,13 @@
 package cn.com.bluemoon.demo.analysis;
 
+/**
+ * @author 78200
+ */
+
 public enum AnalyHtmlEnum {
-    XIU_REN(1,"xiuren","cn.com.bluemoon.demo.analysis.XiuRenHtml","爬取秀人网页面","1");
+
+    XIU_REN(1,"xiuren","cn.com.bluemoon.demo.analysis.XiuRenHtml","爬取秀人网页面","1"),
+    MEI_TU_LU(2,"meitulu","cn.com.bluemoon.demo.analysis.MeituluHtml","美图录","1");
 
     private Integer code;
 

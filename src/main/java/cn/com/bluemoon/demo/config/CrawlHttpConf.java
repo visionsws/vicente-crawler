@@ -40,6 +40,12 @@ public class CrawlHttpConf {
     @Setter
     private Map<String, String> requestHeaders;
 
+    /**
+     * 返回的编码格式
+     */
+    @Getter
+    @Setter
+    private String code = "UTF-8";
 
     /**
      * 请求参数

@@ -32,6 +32,11 @@ public class CrawlResult {
     private List<Map<String, String>> result;
 
     /**
+     * 获取下一页
+     */
+    private List<String> nextPages;
+
+    /**
      * 获取下一个html
      */
     private List<String> nextUrls;

@@ -1,9 +1,7 @@
 package cn.com.bluemoon.demo.entity;
 
+import cn.com.bluemoon.demo.fetcher.JobCount;
 import lombok.*;
-
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * Created by yihui on 2017/6/27.
@@ -14,6 +12,28 @@ import java.util.Set;
 public class CrawlMeta {
 
     /**
+     * 当前任务对应的 {@link JobCount #id }
+     */
+    @Getter
+    @Setter
+    private int jobId;
+
+
+    /**
+     * 当前任务对应的 {@link JobCount #parentId }
+     */
+    @Getter
+    @Setter
+    private int parentJobId;
+
+    /**
+     * 当前爬取的深度
+     */
+    @Getter
+    @Setter
+    private int currentDepth = 0;
+
+    /**
      * 待爬去的网址
      */
     @Getter
@@ -21,16 +41,11 @@ public class CrawlMeta {
     private String url;
 
     /**
-     * 获取指定内容的规则, 因为一个网页中，你可能获取多个不同的内容， 所以放在集合中
+     * 获取指定网页爬取规则, 因为一每一个网页都不一样，所以需要不同的爬取规则
      */
     @Setter
     @Getter
-    private Set<String> selectorRules  = new HashSet<>();
-
-    public Set<String> addSelectorRule(String rule) {
-        this.selectorRules.add(rule);
-        return selectorRules;
-    }
+    private String htmlName;
 
 
 

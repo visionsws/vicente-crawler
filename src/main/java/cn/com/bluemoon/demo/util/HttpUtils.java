@@ -46,8 +46,8 @@ public class HttpUtils {
                     .append(entry.getValue())
                     .append("&");
         }
-
-        HttpGet httpGet = new HttpGet(param.substring(0, param.length() - 1)); // 过滤掉最后一个无效字符
+        // 过滤掉最后一个无效字符
+        HttpGet httpGet = new HttpGet(param.substring(0, param.length() - 1));
         // 设置请求头
         for (Map.Entry<String, String> head : httpConf.getRequestHeaders().entrySet()) {
             httpGet.addHeader(head.getKey(), head.getValue());

@@ -1,13 +1,15 @@
 package cn.com.bluemoon.demo.analysis;
 
-import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 //行业趋势
 public class XiuRenHtml extends AnalyHtmlType {
@@ -15,8 +17,7 @@ public class XiuRenHtml extends AnalyHtmlType {
     private static Logger logger = LoggerFactory.getLogger(XiuRenHtml.class);
 
     @Override
-    public List<Map<String, String>> analyHtml(String html) {
-        Document doc = Jsoup.parse(html);
+    public List<Map<String, String>> analyHtml(Document doc) {
         List<Map<String, String>> list = new ArrayList<>();
         Elements tableList = doc.select("div#masonry");
         Elements trList = tableList.select("div[data-fancybox=gallery]");
@@ -38,27 +39,14 @@ public class XiuRenHtml extends AnalyHtmlType {
             String fileName = picSp[picSp.length-1];
             map.put("fileName",fileName);
             list.add(map);
-           /* switch (i) {
-                case 0:
-                    //店铺名
-                    map.put("shop_name", text);
-                    break;
-                case 1:
-                    //商品ID
-                    map.put("item_id", text);
-                    String uuid = dayTime + "_" + text;
-                    map.put("uuid", uuid);
-                    break;
-            }*/
-
         }
         return list;
     }
 
     @Override
-    public List<String> nextHtml(String html){
-        Document doc = Jsoup.parse(html);
-        List<String> list = new ArrayList<>();
+    public Map<String,List<String>> nextHtml(Document doc){
+        Map<String,List<String>> map = new HashMap<>(2);
+        List<String> nextUrlList = new ArrayList<>();
         Elements tableList = doc.select("div[class=container-fluid my-4]");
         Elements trList = tableList.select("div[class=row]").select("div[class=col-2]");
 
@@ -66,9 +54,10 @@ public class XiuRenHtml extends AnalyHtmlType {
             Element trEle = trList.get(i);
             Elements hrefEle = trEle.select("a[href]");
             String href = hrefEle.attr("href");
-            list.add(href);
+            nextUrlList.add(href);
         }
-        return  list;
+        map.put("nextUrlList",nextUrlList);
+        return  map;
     }
 
 

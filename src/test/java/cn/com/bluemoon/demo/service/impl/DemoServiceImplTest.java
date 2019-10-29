@@ -2,6 +2,8 @@ package cn.com.bluemoon.demo.service.impl;
 
 import cn.com.bluemoon.demo.entity.CrawlMeta;
 import cn.com.bluemoon.demo.entity.CrawlResult;
+import cn.com.bluemoon.demo.fetcher.Fetcher;
+import cn.com.bluemoon.demo.job.DefaultAbstractCrawlJob;
 import cn.com.bluemoon.demo.job.SimpleCrawlJob;
 import cn.com.bluemoon.demo.service.DemoService;
 import cn.com.bluemoon.demo.util.FileImgUtils;
@@ -44,21 +46,49 @@ public class DemoServiceImplTest {
         demoService.test(msg);
     }
 
+    public static class QueueCrawlerJob extends DefaultAbstractCrawlJob {
+
+        public void beforeRun() {
+            // 设置返回的网页编码
+            super.setResponseCode("utf-8");
+        }
+
+        @Override
+        protected void visit(CrawlResult crawlResult) {
+            System.out.println(Thread.currentThread().getName() + "___" + crawlMeta.getCurrentDepth() + "___" + crawlResult.getUrl());
+        }
+    }
+
+
+
     /**
      * 测试我们写的最简单的一个爬虫,
      *
      * 目标是爬取一篇博客
      */
     @Test
-    public void testFetch() throws InterruptedException {
-        String url = "https://isaob.com/beauty/20190725/18316.html";
-        Set<String> selectRule = new HashSet<>();
-        //selectRule.add("div[id=masonry]>div>img[title]"); // 博客标题
-        selectRule.add("div#masonry>div[data-src$=.jpg]"); // 博客正文
+    public void testFetch2() throws Exception {
+        Fetcher fetcher = new Fetcher(2,QueueCrawlerJob.class);
+        String url = "https://www.meitulu.com/item/18716.html";
+        CrawlMeta crawlMeta = new CrawlMeta();
+        crawlMeta.setUrl(url); // 设置爬取的网址
+        crawlMeta.setHtmlName("meitulu"); // 设置抓去的内容
+        fetcher.addFeed(crawlMeta);
+        fetcher.start(QueueCrawlerJob.class);
+    }
+
+    /**
+     * 测试我们写的最简单的一个爬虫,
+     *
+     * 目标是爬取一篇博客
+     */
+    @Test
+    public void testFetch1() throws InterruptedException {
+        String url = "https://www.f4mm.com/beauty/20190725/18316.html";
 
         CrawlMeta crawlMeta = new CrawlMeta();
         crawlMeta.setUrl(url); // 设置爬取的网址
-        crawlMeta.setSelectorRules(selectRule); // 设置抓去的内容
+        crawlMeta.setHtmlName("xiuren");
 
 
         SimpleCrawlJob job = new SimpleCrawlJob();
